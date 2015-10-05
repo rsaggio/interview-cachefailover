@@ -17,6 +17,7 @@ So what do you have to do?
 * Since you know that this information is immutable until someone hits POST/DELETE customer methods, you shall not hit the Database if cache information is available.
 * To let the things a little bit interesting you will have to implement an failover: If Cache Server goes down, you have to hit the Database and this needs to be transparent to our end user, not an Error page!
 * Make Unit and Functional tests to ensure everything is working fine.
+* You will recieve a thumbs up for good Commit Messages and SOLID knowledge.
 
 Minimum Requirements
 ---------
