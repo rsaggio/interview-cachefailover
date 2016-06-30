@@ -27,4 +27,5 @@ class CustomersControllerTest extends WebTestCase
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
+    
 }

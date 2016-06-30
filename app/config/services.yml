@@ -3,5 +3,11 @@ services:
         class:        AppBundle\Service\DatabaseService
         arguments:    [%database_host%, %database_port%, %database_name%]
     cache_service:
-        class:        AppBundle\Service\CacheService
+        class:        AppBundle\Service\RedisCacheService
         arguments:    [%cache_host%, %cache_port%, %cache_prefix%]
+    customers_dao:
+        class: AppBundle\Dao\CustomersDao
+        arguments: ['@database_service', '@cache_service']
+    customers_controller:
+        class: AppBundle\Controller\CustomersController
+        arguments: ["@customers_dao"]

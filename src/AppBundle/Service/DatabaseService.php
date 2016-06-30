@@ -27,4 +27,9 @@ class DatabaseService
     {
         return $this->database;
     }
+
+    public function getCollection($collection) {
+        return $this->database->$collection;
+    }
+
 }

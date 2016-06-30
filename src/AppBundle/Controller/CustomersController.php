@@ -7,24 +7,30 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Dao\CustomersDao;
 
+/**
+ * @Route(service="customers_controller")
+ */
 class CustomersController extends Controller
 {
+
+    private $customersDao;
+    
+    public function __construct(CustomersDao $customersDao) {
+        $this->customersDao = $customersDao;    
+    }
     /**
      * @Route("/customers/")
      * @Method("GET")
      */
     public function getAction()
     {
-        $cacheService = $this->get('cache_service');
 
-        if (empty($customers)) {
-            $database = $this->get('database_service')->getDatabase();
-            $customers = $database->customers->find();
-            $customers = iterator_to_array($customers);
-        }
+        $customers = $this->customersDao->getAll();
 
         return new JsonResponse($customers);
+
     }
 
     /**
@@ -33,7 +39,7 @@ class CustomersController extends Controller
      */
     public function postAction(Request $request)
     {
-        $database = $this->get('database_service')->getDatabase();
+
         $customers = json_decode($request->getContent());
 
         if (empty($customers)) {
@@ -41,7 +47,7 @@ class CustomersController extends Controller
         }
 
         foreach ($customers as $customer) {
-            $database->customers->insert($customer);
+            $this->customersDao->insert($customer);
         }
 
         return new JsonResponse(['status' => 'Customers successfully created']);
@@ -53,9 +59,7 @@ class CustomersController extends Controller
      */
     public function deleteAction()
     {
-        $database = $this->get('database_service')->getDatabase();
-        $database->customers->drop();
-
+        $this->customersDao->drop();
         return new JsonResponse(['status' => 'Customers successfully deleted']);
     }
 }
